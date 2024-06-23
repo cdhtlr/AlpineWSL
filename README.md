@@ -9,12 +9,20 @@ Open the WSL Manager application (download it first from [bostrot/wsl2-distro-ma
 Open Alpine Linux from <b>Windows Terminal</b> then enter the following command
 
     apk update
-    apk add bash sudo ttf-freefont
+    apk upgrade
+    apk add bash openrc openssh sudo ttf-freefont --no-cache
     export DISPLAY=localhost:0.0
     adduser -h /home/user -s /bin/ash user
+    passwd root
     su -l root
     echo '%wheel ALL=(ALL) ALL' > /etc/sudoers.d/wheel
     adduser user wheel
+    echo "" > /etc/motd
+    echo "PermitRootLogin yes" >> /etc/ssh/sshd_config
+    rc-status
+    touch /run/openrc/softlevel
+    rc-update add sshd
+    rc-service sshd start
 
 If you haven't set <i>WSL auto shutdown when idle</i>, shutdown WSL with the following command
 
@@ -23,7 +31,11 @@ If you haven't set <i>WSL auto shutdown when idle</i>, shutdown WSL with the fol
 Close Windows Terminal then reopen it.
 
 
-Install the GUI application you need, for example <b>gedit</b>. Then open the gedit application.
+Install the GUI application you need, for example <b>gedit</b>.
+
+    apk add gedit
+
+Then open the gedit application.
 
 WSLg should create a shortcut for the application automatically, if not, create the shortcut yourself with the target
 
