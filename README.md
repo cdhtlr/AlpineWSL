@@ -8,25 +8,25 @@ Open the WSL Manager application (download it first from [bostrot/wsl2-distro-ma
 
 Open Alpine Linux from <b>Windows Terminal</b> then enter the following command
 
-    apk update
-    apk upgrade
-    apk add bash curl openrc openssh sudo ttf-freefont wslu --no-cache
+    wget -q -O /etc/apk/keys/sgerrand.rsa.pub https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub && wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.35-r1/glibc-2.35-r1.apk
+    apk update && apk upgrade
+    apk add glibc-2.35-r1.apk libstdc++ bash curl openrc sudo ttf-freefont wslu --no-cache
     export DISPLAY=localhost:0.0
-    adduser -h /home/user -s /bin/ash user
-    passwd root
+    echo -e "user\nuser" | adduser -h /home/user -s /bin/ash user
+    echo -e "root\nroot" | passwd root
     su -l root
     echo '%wheel ALL=(ALL) ALL' > /etc/sudoers.d/wheel
     adduser user wheel
-    echo "" > /etc/motd
-    echo "PermitRootLogin yes" >> /etc/ssh/sshd_config
+    echo "echo 'Welcome to AlpineWSL :D'" > /etc/motd
     echo "rc-status" > .profile
     echo "touch /run/openrc/softlevel" >> .profile
-    echo "rc-service sshd start" >> .profile
     echo "alias a=wslact" >> .profile
     echo "alias c=wslusc" >> .profile
     echo "alias v=wslview" >> .profile
     echo "clear" >> .profile
-    rm -rf .ash_history
+    echo "/etc/motd" >> .profile
+    chmod +x /etc/motd .profile
+    rm -rf .ash_history glibc-2.35-r1.apk /etc/apk/keys/sgerrand.rsa.pub
 
 If you haven't set <i>WSL auto shutdown when idle</i>, shutdown WSL with the following command
 
